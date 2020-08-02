@@ -1,0 +1,5 @@
+1、问题：主从配置，主服务写入的数据时，同步从服务时出现延迟，导致日志条数超过binlog的最大容量出现OUT_OF_SYNC
+	 解决办法：降低主服务的写入速度(限制写主服务的线程数或者磁盘的读写速度)，扩大binlog的数量(https://blog.csdn.net/gold2008/article/details/69947716)
+
+2、问题：SSDB中level不连续或者缺失
+	原因：正常现象，当某level没有文件后并执行compact会出现该现象
