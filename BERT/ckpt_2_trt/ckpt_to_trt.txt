@@ -1,0 +1,15 @@
+一、总体步骤：
+	1、checkpoint转savemodel；savemodel转onnx；onnx转trt；最后TensorRt直接加载trt模型即可
+	2、checkpoint转savemodel: 依赖bert_online.py
+		参考：https://github.com/onnx/tensorflow-onnx/blob/master/tutorials/BertTutorial.ipynb
+					https://github.com/onnx/tensorflow-onnx
+		注意：tf训练版本和转换版本一致；python版本最好为3.6
+					在checkpoint文件中指定带转换的名称：model_checkpoint_path
+	3、savemodel转onnx：依赖tf2onnx.convert环境
+		参考：https://github.com/onnx/tensorflow-onnx/blob/master/tutorials/BertTutorial.ipynb
+		python -m tf2onnx.convert --saved-model $LAST_SAVED_MODEL --output $OUT/bert.onnx --opset 8
+	4、onnx转trt：onnx-tensorrt需要安装对应版本的pb和tensorrt(pb>=3.13.X  TensorRT 7.1),对应精度(-d 16)
+		参考：https://github.com/onnx/onnx-tensorrt
+		onnx2trt my_model.onnx -o my_engine.trt -d 16
+	5、加载trt模型，并转化成引擎，下次直接加载。参考read_trt.cc
+
